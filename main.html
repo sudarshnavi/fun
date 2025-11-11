@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Miniver font -->
+    <link href="https://fonts.googleapis.com/css2?family=Miniver&display=swap" rel="stylesheet">
+    <style>
+        /* Use Miniver as the default font */
+        body {
+            font-family: 'Playwrite México Guides', cursive;
+        }
+        /* A little sparkle effect for the background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255,255,255,0) 0%, rgba(220, 38, 127, 0.1) 100%);
+            z-index: -1;
+            opacity: 0.5;
+            animation: sparkle 20s infinite linear;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 antialiased">
+
+    <!-- Main Container -->
+    <div class="container mx-auto max-w-4xl p-6 md:p-12">
+        
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <!-- IMPORTANT: Change this to his name or a pet name! -->
+            <h1 class="text-5xl md:text-6xl font-bold text-pink-400 mb-4">Hey, CHAKKU!</h1>
+            <p class="text-3xl text-pink-300">I made this little page just for you.</p>
+        </header>
+
+        <!-- Interactive Compliment Section -->
+        <section class="mb-12">
+            <div class="bg-slate-800 rounded-2xl shadow-xl p-8 text-center transition-all duration-300 hover:shadow-2xl">
+                <h2 class="text-4xl font-bold text-pink-400 mb-4">A Little Reminder...</h2>
+                <div id="compliment-display" class="text-3xl text-slate-200 min-h-[3rem] flex items-center justify-center mb-6 px-4 py-2 bg-slate-700 rounded-lg">
+                    Click the button!
+                </div>
+                <button id="compliment-btn" class="bg-pink-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 hover:bg-pink-700 hover:shadow-xl transform hover:-translate-y-1 text-2xl">
+                    Click for a compliment!           </button>
+            </div>
+        </section>
+
+   
+        <!-- Love Question Section -->
+        <section class="mb-12">
+            <!-- Set position relative and overflow-hidden so the button can't escape -->
+            <div id="love-card" class="bg-slate-800 rounded-2xl shadow-xl p-8 text-center transition-all duration-300 hover:shadow-2xl relative overflow-hidden min-h-[250px] md:min-h-[200px]">
+                <h2 class="text-4xl font-bold text-pink-400 mb-4">One Last Question...</h2>
+                <p id="love-question" class="text-3xl text-slate-300 mb-8">Do you love me?</p>
+                <div id="button-container" class="flex justify-center items-center gap-6">
+                    <button id="yes-btn" class="bg-green-600 text-white font-bold py-4 px-10 text-3xl rounded-full shadow-lg transition-all duration-300 hover:bg-green-700 transform hover:scale-110 z-10">
+                        YES! OBV
+                    </button>
+                    <!-- This button will move around! -->
+                    <button id="no-btn" class="bg-red-600 text-white font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-300 ease-out absolute z-20 text-2xl">
+                        Umm
+                    </button>
+                </div>
+                <!-- This message appears after clicking yes -->
+                <div id="yes-message" class="hidden mt-8 text-4xl font-bold text-pink-400">
+                    I love you more!
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Message -->
+        <footer class="text-center mt-12">
+            <p class="text-4xl text-pink-400 font-bold">I love you so much!</p>
+            <p class="text-2xl text-pink-500 mt-2">Made with love by your fav person in the world!</p> <!-- <!-- Change this! -->
+        </footer>
+
+    </div>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Compliment Generator ---
+            const complimentBtn = document.getElementById('compliment-btn');
+            const complimentDisplay = document.getElementById('compliment-display');
+            
+            // <!-- Add your own cute compliments here! -->
+            const compliments = [
+                "You have the best smile!",
+                "You are the most determined person i know!",
+                "You are the strongest person I know!",
+                "You're so smart and creative.",
+                "I love your laugh more than anything.",
+                "I love your voice!",
+                "You're my favorite person to talk to.",
+                "I'm so lucky to have you.",
+                "You're doing amazing!",
+                "You have the kindest heart."
+            ];
+
+            // Set a default compliment on load
+            complimentDisplay.textContent = "You're the best!";
+
+            complimentBtn.addEventListener('click', () => {
+                const randomIndex = Math.floor(Math.random() * compliments.length);
+                const randomCompliment = compliments[randomIndex];
+                
+                // Add a little fade effect
+                complimentDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    complimentDisplay.textContent = randomCompliment;
+                    complimentDisplay.style.opacity = 1;
+                }, 300);
+            });
+
+            // --- Coupon Redeemer ---
+            const couponBtns = document.querySelectorAll('.coupon-btn');
+
+            couponBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.disabled = true;
+                    btn.textContent = "Redeemed! 🥰";
+                    // Make it look redeemed
+                    btn.classList.remove('bg-rose-500', 'hover:bg-rose-600');
+                    btn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                });
+            });
+
+          
+
+            // --- Love Me Question ---
+            const loveCard = document.getElementById('love-card');
+            const noBtn = document.getElementById('no-btn');
+            const yesBtn = document.getElementById('yes-btn');
+            const loveQuestion = document.getElementById('love-question');
+            const yesMessage = document.getElementById('yes-message');
+            const buttonContainer = document.getElementById('button-container');
+
+            const moveButton = () => {
+                // Get card dimensions
+                const cardRect = loveCard.getBoundingClientRect();
+                // Get button dimensions
+                const btnRect = noBtn.getBoundingClientRect();
+
+                // Calculate max positions, with a 10px buffer
+                const maxTop = cardRect.height - btnRect.height - 10;
+                const maxLeft = cardRect.width - btnRect.width - 10;
+
+                // Generate random positions (padding of 10px)
+                let newTop = Math.random() * maxTop + 10;
+                let newLeft = Math.random() * maxLeft + 10;
+
+                // Apply new positions
+                noBtn.style.top = `${newTop}px`;
+                noBtn.style.left = `${newLeft}px`;
+            };
+
+            // Move button on hover
+            noBtn.addEventListener('mouseover', moveButton);
+
+            // Also move button on touch (for mobile)
+            noBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent "click"
+                moveButton(); // Trigger the move
+            });
+
+            // Show 'I love you too' message on 'Yes' click
+            yesBtn.addEventListener('click', () => {
+                // Hide buttons and question
+                buttonContainer.style.display = 'none'; // Hides both buttons
+                loveQuestion.style.display = 'none';
+                
+                // Show the message
+                yesMessage.classList.remove('hidden');
+                // Center the message
+                loveCard.style.minHeight = 'auto'; // Remove min-height
+                loveCard.classList.add('flex', 'items-center', 'justify-center');
+            });
+
+        });
+    </script>
+
+</body>
+</html>
